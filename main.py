@@ -30,8 +30,8 @@ sales_df=sales_df.withColumn("order_qaurter",quarter(sales_df.order_date))
 # sales_df.show()
 
 menu_schema = StructType([
-    StructField("menu_id",IntegerType(),True),
-    StructField("menu_item",StringType(),True),
+    StructField("product_id",IntegerType(),True),
+    StructField("product_name",StringType(),True),
     StructField("price",StringType(),True)
 ])
 
