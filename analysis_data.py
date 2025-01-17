@@ -1,4 +1,4 @@
-from pyspark.sql.functions import count
+from pyspark.sql.functions import count, countDistinct
 from main import menu_df, sales_df
 
 
@@ -34,13 +34,36 @@ count_of_product_purchase = (sales_df
                                 .groupBy('product_id','product_name')
                                 .agg(count('product_id').alias('prouduct_count'))
                                 .orderBy('product_id', 'product_name'))
-count_of_product_purchase.show() 
+# count_of_product_purchase.show() 
 
 # top 5 ordered item
 
-count_of_product_purchase = (sales_df
+top_five_ordered_items = (sales_df
                                 .join(menu_df,"product_id")
                                 .groupBy('product_id','product_name')
                                 .agg(count('product_id').alias('prouduct_count'))
-                                .orderBy('product_id', 'product_name'))
-count_of_product_purchase.show() 
+                                .orderBy('prouduct_count',ascending = 0)
+                                .drop('product_id')
+                                .limit(5)
+)
+# top_five_ordered_items.show() 
+
+# Top ordere item
+
+top_ordered_item = (sales_df
+                                .join(menu_df,"product_id")
+                                .groupBy('product_id','product_name')
+                                .agg(count('product_id').alias('prouduct_count'))
+                                .orderBy('prouduct_count',ascending = 0)
+                                .drop('product_id')
+                                .limit(1)
+)
+# top_ordered_item.show() 
+
+# frequency of vistors at the resturant
+df=(sales_df.filter(sales_df.source_order=='Restaurant').groupBy('customer_id').agg(countDistinct('order_date'))
+)
+
+df.show()
+filtered_count = sales_df.filter(sales_df.source_order == 'Restaurant').count()
+
