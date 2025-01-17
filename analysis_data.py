@@ -64,6 +64,15 @@ top_ordered_item = (sales_df
 df=(sales_df.filter(sales_df.source_order=='Restaurant').groupBy('customer_id').agg(countDistinct('order_date'))
 )
 
-df.show()
-filtered_count = sales_df.filter(sales_df.source_order == 'Restaurant').count()
+# df.show()
 
+# top sales by country 
+total_amount_spend_by_country=(sales_df.join(menu_df,'product_id').groupBy('location').agg({'price':'sum'}))
+
+# total_amount_spend_by_country.show() 
+
+
+# top sales by order source  
+total_amount_spend_by_order_source=(sales_df.join(menu_df,'product_id').groupBy('source_order').agg({'price':'sum'}))
+
+total_amount_spend_by_order_source.show() 
